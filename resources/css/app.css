@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body *::-webkit-scrollbar-track
+{
+	border-radius: 10px;
+	background-color: rgba(0, 0, 0, 0.08)
+}
+
+body *::-webkit-scrollbar
+{
+    margin-left: 20px;
+	width: 6px;
+	background-color: #F5F5F5;
+}
+
+body *::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+    background-color: #ea580c;
+}

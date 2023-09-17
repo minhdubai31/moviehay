@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\EpisodeController;
+use App\Http\Controllers\SeasonController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Homepage
+Route::get('/', [EpisodeController::class, 'index']);
+
+// Episode
+Route::get('/{season}', [SeasonController::class, 'show']);
+
