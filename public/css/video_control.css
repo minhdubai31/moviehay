@@ -1,0 +1,30 @@
+        /* Font*/
+        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@100;200;300;400;500;700;900&display=swap');
+
+        .plyr {
+            border-radius: 0.5rem;
+        }
+
+        :root {
+            --plyr-color-main: #ea580c;
+            --plyr-font-family: Google Sans;
+            --plyr-font-size-base: 15px;
+            --plyr-font-size-small: 15px;
+            --plyr-font-size-time: 15px;
+            --plyr-font-size-badges: 10px;
+            --plyr-font-size-menu: var(--plyr-font-size-base);
+            --plyr-font-weight-regular: 400;
+            --plyr-font-weight-bold: 700;
+            --plyr-font-size-captions-medium: 60px;
+            --plyr-font-size-captions-large: 50px;
+            --plyr-captions-text-color: #fff;
+            --plyr-captions-background: rgba(0,
+                    0, 0, 0.8);
+            --plyr-video-control-color: #fff;
+            --plyr-video-control-color-hover: #fff;
+            --plyr-video-control-background-hover: #ea580c;
+            --plyr-video-background: #000000;
+            --plyr-video-controls-background: linear-gradient(rgba(10, 0, 50, 0),
+                    rgba(0, 50, 50, 0.75));
+            --plyr-font-smoothing: true;
+        }

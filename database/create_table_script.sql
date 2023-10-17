@@ -1,33 +1,32 @@
 create table series (
-	seri_id int primary key AUTO_INCREMENT,
-    seri_name text(1000) not null,
+	sr_id int primary key AUTO_INCREMENT,
+    sr_name text(1000) not null,
     country tinytext,
-    seri_poster text(3000)
+    sr_poster text(3000)
 );
 
 create table seasons (
-	season_id int primary key auto_increment,
-    season_name text(1000) not null,
-    release_date date not null,
-    director text(255) not null,
-    categories text(1000),
-    season_description text(5000),
-    season_order int,
-    season_tag tinytext,
-	season_poster text(3000),
-    seri_id int,
-    fOREIGN KEY (seri_id) REFERENCES series(seri_id)
+	ss_id int primary key auto_increment,
+    ss_name text(1000) not null,
+    ss_release_date date,
+    ss_director text(255),
+    ss_categories text(1000),
+    ss_description text(5000),
+    ss_order int not null,
+    ss_tag tinytext,
+	ss_poster text(3000),
+    sr_id int,
+    fOREIGN KEY (sr_id) REFERENCES series(sr_id)
 );
 
 create table episodes (
-	episode_id int primary key auto_increment,
-    episode_name text(1000) not null,
-    episode_order int not null,
-    likes int,
-    views int,
-    duration int,
-    season_id int,
-    thumbnail text(3000),
-    foreign key (season_id) references seasons(season_id)
+	ep_id int primary key auto_increment,
+    ep_name text(1000) not null,
+    ep_order int not null,
+    ep_likes int,
+    ep_views int,
+    ss_id int,
+    ep_thumbnail text(3000),
+    foreign key (ss_id) references seasons(ss_id)
 );
     
