@@ -1,6 +1,6 @@
 <x-layout>
     <div class="inline-flex w-full flex-wrap">
-        <h1 class="font-medium text-3xl py-10 text-orange-600 text-center w-full">Danh sách phim</h1>
+        <h1 class="font-medium text-3xl py-10 text-orange-600 text-center w-full">Danh sách người dùng</h1>
         <div class="search-bar mb-2">
             <form action="" method="GET">
                 <div class="search-bar-container relative inline-block">
