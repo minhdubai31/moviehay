@@ -23,14 +23,14 @@ class HomeController extends Controller
             ]);
         }
 
-        $seasons = Episode::withCount('views')->get()->groupBy('ss_id')->take(10);
+        $seasons = Episode::withCount('views')->get()->groupBy('ss_id');
         foreach ($seasons as $item) {
             $item['total_views'] = $item->sum('views_count');
         }
         return view('home.index', [
             'episodes_new' => Episode::all()->sortByDesc('updated_at')->take(10),
             'seasons_random' => Season::inRandomOrder()->get()->take(12),
-            'seasons_by_view' => $seasons->sortByDesc('total_views')
+            'seasons_by_view' => $seasons->sortByDesc('total_views')->take(10)
         ]);
     }
 }

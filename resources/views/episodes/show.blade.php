@@ -4,7 +4,7 @@
 
     <div class="flex flex-wrap gap-5">
         <div class="lg:w-8/12 xl:w-9/12">
-            <video class="vid1" controls="" crossorigin="" id="player" playsinline="">
+            <video class="vid1" autoplay controls="" crossorigin="" id="player" playsinline="">
                 @if (file_exists('storage/' . $episode->v_origin))
                     <source size="{{ $episode->v_origin_size }}" src="{{ asset('storage/' . $episode->v_origin) }}"
                         type="video/mp4">
