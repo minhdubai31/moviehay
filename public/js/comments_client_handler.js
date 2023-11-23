@@ -9,7 +9,6 @@ function clearForm(form) {
     }
 }
 
-
 // Add cancel button into form
 function addCancelBtn(form) {
     $(form).children().last().fadeIn(100);
@@ -21,6 +20,7 @@ function removeCancelBtn(form) {
     clearForm(form);
 }
 
+// Check if comment content is empty or not
 function commentAccept(form, cancelBtnToggle = false) {
     if (form.cmt_content.value.trim() != "") {
         form.submitBtn.disabled = false;

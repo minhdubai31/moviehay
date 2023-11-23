@@ -17,7 +17,7 @@ class CommentController extends Controller
         ]);
 
         $comment = Comment::create($formData);
-
+        
         return response([
             'username' => $comment->user->username,
             'cmt_content' => $comment->cmt_content,

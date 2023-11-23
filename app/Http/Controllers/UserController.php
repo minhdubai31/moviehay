@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -23,6 +22,7 @@ class UserController extends Controller
     // Create New User
     public function store(Request $request)
     {
+        // Validate request data
         $formData = $request->validate(
             [
                 'user_id' => 'require',
@@ -46,6 +46,7 @@ class UserController extends Controller
         // Hash Password
         $formData['password'] = bcrypt($formData['password']);
 
+        // Save avatar image to storage
         if ($request->hasFile('avatar')) {
             $image_path = '/images/' . $request->file('avatar')->getClientOriginalName() . time() . 'thumb.jpg';
             Image::make($request->file('avatar'))->resize(300, null, function ($constraint) {
@@ -144,10 +145,10 @@ class UserController extends Controller
     // Update user
     public function update(Request $request, User $user)
     {
+        // Check if logged in user is owner of the account
         if (auth()->user()->username != 'admin' and auth()->user()->user_id != $user->user_id) {
             return redirect('/');
         }
-
 
         $rules = [
             'username' => ['required', 'min:3', 'not_regex:/^admin$/'],
@@ -171,7 +172,10 @@ class UserController extends Controller
             ]);
         }
 
+        // If user choose change password
         if ($request->has('change-pass')) {
+
+            // Check if inputted old password correct 
             if (Hash::check($request['old_password'], $user->password)) {
                 $rules = array_merge($rules, [
                     'password' => 'required|confirmed|min:6'
@@ -195,6 +199,7 @@ class UserController extends Controller
                 // Hash password
                 $formData['password'] = bcrypt($formData['password']);
             } else {
+                // Old password incorrect
                 $validator = Validator::make($request->all(), $rules, $errormsg);
                 $validator->after(
                     function ($validator) {
@@ -211,15 +216,18 @@ class UserController extends Controller
                 }
             }
         } else {
+            // Check other rules if password is correct
             $validator = Validator::make($request->all(), $rules, $errormsg);
             if ($validator->fails()) {
                 return back()
                     ->withErrors($validator)
                     ->withInput();
             }
+
             $formData = $validator->validated();
         }
 
+        // Update new avatar
         if ($request->hasFile('avatar')) {
             $image_path = '/images/' . $request->file('avatar')->getClientOriginalName() . time() . 'thumb.jpg';
             Image::make($request->file('avatar'))->resize(300, null, function ($constraint) {
@@ -228,14 +236,16 @@ class UserController extends Controller
 
             $formData['avatar'] = $image_path;
         }
+
+        // Delete old avatar file
         if ($user->avatar != null)
-                Storage::disk('public')->delete($user->avatar);
+            Storage::disk('public')->delete($user->avatar);
 
         $user->update($formData);
         return redirect('/users/manage/' . $user->user_id)->with('message', 'Cập nhật tài khoản thành công');
     }
 
-    // user history
+    // User history
     public function history(User $user)
     {
         if (auth()->user()->username != 'admin' and auth()->user()->user_id != $user->user_id) {

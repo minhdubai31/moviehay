@@ -16,11 +16,7 @@ class Episode extends Model
         'sr_id',
         'ss_id',
         'ep_order',
-        'ep_thumbnail',
-        'v_origin',
-        'v_sd',
-        'v_hd',
-        'v_origin_size'
+        'ep_thumbnail'
     ];
 
     public function season(): BelongsTo {
@@ -28,10 +24,6 @@ class Episode extends Model
     }
 
     public function videos(): HasMany {
-        return $this->hasMany(Video::class, 'ep_id');
-    }
-
-    public function subtitles(): HasMany {
         return $this->hasMany(Video::class, 'ep_id');
     }
 

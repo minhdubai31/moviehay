@@ -31,9 +31,8 @@ class uploadVideo implements ShouldQueue
      */
     public function handle(): void
     {
-        $lowBitrate = (new X264)->setKiloBitrate(250);
-        $midBitrate = (new X264)->setKiloBitrate(500);
-        $highBitrate = (new X264)->setKiloBitrate(1000);
+        $lowBitrate = (new X264)->setKiloBitrate(300);
+        $midBitrate = (new X264)->setKiloBitrate(700);
         if ($this->height > 480) {
             FFMpeg::fromDisk('public')
                 ->open($this->file_path)

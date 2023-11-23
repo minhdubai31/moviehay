@@ -16,9 +16,11 @@ class AdminController extends Controller
     // Homepage
     public function index()
     {
+        // Check if logged in user is admin
         if(auth()->user()->username != 'admin') {
             return redirect('/');
         }
+
         return View('admin.index', [
             'total_users' => User::all()->count(),
             'total_views' => View::all()->count(),
@@ -30,9 +32,12 @@ class AdminController extends Controller
     // Films manager
     public function films(Request $request)
     {
+        // Check if logged in user is admin
         if(auth()->user()->username != 'admin') {
             return redirect('/');
         }
+
+        // Check if admin search for a film
         if ($request['search']) {
             $returnSeries = Serie::where('sr_name', 'like', '%' . $request['search'] . '%')
                 ->orWhereHas('seasons', function (Builder $query) use ($request) {
@@ -42,6 +47,8 @@ class AdminController extends Controller
         } else {
             $returnSeries = Serie::Paginate(2);
         }
+
+        // Return admin films manager
         return view('admin.films', [
             'series' => $returnSeries
         ]);
@@ -50,9 +57,12 @@ class AdminController extends Controller
     // Users manager
     public function users(Request $request)
     {
+        // Check if logged in user is admin
         if(auth()->user()->username != 'admin') {
             return redirect('/');
         }
+
+        // Check if admin search for a user (don't list admin user)
         if ($request['search']) {
             $returnUsers = User::where([['username', 'like', '%' . $request['search'] . '%'], ['username', '<>', 'admin']])
                 ->orWhere([['email', 'like', '%' . $request['search'] . '%'], ['username', '<>', 'admin']])
@@ -60,6 +70,8 @@ class AdminController extends Controller
         } else {
             $returnUsers = User::where('username', '<>', 'admin')->paginate(10);
         }
+
+        // Return admin users manager
         return View('admin.users', [
             'users' => $returnUsers
         ]);
@@ -68,10 +80,12 @@ class AdminController extends Controller
     // Users manager
     public function comments(Request $request)
     {
+        // Check if logged in user is admin
         if(auth()->user()->username != 'admin') {
             return redirect('/');
         }
-        // Comments
+
+        // Check if admin search for a comments
         if ($request['search']) {
             $returnComments = Comment::where('cmt_content', 'like', '%' . $request['search'] . '%')
                 ->orWhereHas('user', function (Builder $query) use ($request) {
@@ -87,7 +101,7 @@ class AdminController extends Controller
             $returnComments = Comment::Paginate(5);
         }
 
-        // Replycomments
+        // Check if admin search for a replycomments
         if ($request['search']) {
             $returnReplycomments = Replycomment::where('rcmt_content', 'like', '%' . $request['search'] . '%')
                 ->orWhereHas('user', function (Builder $query) use ($request) {
@@ -104,6 +118,8 @@ class AdminController extends Controller
         } else {
             $returnReplycomments = Replycomment::Paginate(5);
         }
+
+        // Return admin comments manager
         return View('admin.comments', [
             'comments' => $returnComments,
             'replycomments' => $returnReplycomments

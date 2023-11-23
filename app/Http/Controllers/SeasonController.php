@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Serie;
 use App\Models\Season;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
@@ -30,6 +29,7 @@ class SeasonController extends Controller
     // Create new season
     public function create()
     {
+        // Check if logged in user is admin
         if(auth()->user()->username != 'admin') {
             return redirect('/');
         }
@@ -42,9 +42,12 @@ class SeasonController extends Controller
     // Store new season
     public function store(Request $request)
     {
+        // Check if logged in user is admin
         if(auth()->user()->username != 'admin') {
             return redirect('/');
         }
+
+        // Validate request data
         $formData = $request->validate([
             'sr_id' => 'required',
             'ss_name' => 'required|min: 3',
@@ -65,20 +68,23 @@ class SeasonController extends Controller
             'ss_bg.required' => 'Vui lòng thêm ảnh bìa.'
         ]);
 
+        // Not require fields
         $formData['ss_release_date'] = $request['ss_release_date'];
         $formData['ss_director'] = $request['ss_director'];
         $formData['ss_single'] = $request->has('ss_single');
 
-
+        // Save poster to storage
         if ($request->hasFile('ss_poster')) {
             $image_path = '/images/' . $request->file('ss_poster')->getClientOriginalName() . time() . 'thumb.jpg';
             Image::make($request->file('ss_poster'))->resize(600, null, function ($constraint) {
                 $constraint->aspectRatio();
             })->save(storage_path('app/public/' . $image_path));
 
+            // Save poster path to form data
             $formData['ss_poster'] = $image_path;
         }
 
+        // Save background image to storage
         if ($request->hasFile('ss_bg')) {
             $formData['ss_bg'] = $request->file('ss_bg')->store('images', 'public');
         }
@@ -117,6 +123,17 @@ class SeasonController extends Controller
         if(auth()->user()->username != 'admin') {
             return redirect('/');
         }
+
+        // Delete all relative files from storage
+        Storage::disk('public')->delete($season->ss_bg);
+        Storage::disk('public')->delete($season->ss_poster);
+        foreach ($season->episodes as $episode) {
+            Storage::disk('public')->delete($episode->ep_thumbnail);
+            foreach ($episode->videos as $video) {
+                Storage::disk('public')->delete($video->v_path);
+            }
+        }
+
         $season->delete();
         return back()->with('message', 'Season phim đã được xóa');
     }
@@ -124,6 +141,7 @@ class SeasonController extends Controller
     // Edit a season
     public function edit(Season $season)
     {
+        // Check if logged in user is admin
         if(auth()->user()->username != 'admin') {
             return redirect('/');
         }
@@ -135,9 +153,12 @@ class SeasonController extends Controller
     // Update a season
     public function update(Request $request, Season $season)
     {
+        // Check if logged in user is admin
         if(auth()->user()->username != 'admin') {
             return redirect('/');
         }
+
+        // Validate request data
         $formData = $request->validate([
             'ss_name' => 'required|min: 3',
             'ss_description' => 'required|min: 20',
@@ -152,6 +173,7 @@ class SeasonController extends Controller
             'ss_categories.required' => 'Vui lòng nhập thể loại.',
         ]);
 
+        // Same with create new season
         $formData['ss_release_date'] = $request['ss_release_date'];
         $formData['ss_director'] = $request['ss_director'];
         $formData['ss_single'] = $request->has('ss_single');

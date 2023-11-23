@@ -5,23 +5,13 @@
     <div class="flex flex-wrap gap-5">
         <div class="lg:w-8/12 xl:w-9/12">
             <video class="vid1" autoplay controls="" crossorigin="" id="player" playsinline="">
-                @if (file_exists('storage/' . $episode->v_origin))
-                    <source size="{{ $episode->v_origin_size }}" src="{{ asset('storage/' . $episode->v_origin) }}"
-                        type="video/mp4">
-                    </source>
-                @endif
-                @isset($episode->v_sd)
-                    @if (file_exists('storage/' . $episode->v_sd))
-                        <source size="480" src="{{ asset('storage/' . $episode->v_sd) }}" type="video/mp4">
+                @foreach ($episode->videos->sortByDesc('v_resolution') as $video)
+                    @if (file_exists('storage/' . $video->v_path))
+                        <source size="{{ $video->v_resolution }}" src="{{ asset('storage/' . $video->v_path) }}"
+                            type="video/mp4">
                         </source>
                     @endif
-                @endisset
-                @isset($episode->v_hd)
-                    @if (file_exists('storage/' . $episode->v_hd))
-                        <source size="720" src="{{ asset('storage/' . $episode->v_hd) }}" type="video/mp4">
-                        </source>
-                    @endif
-                @endisset
+                @endforeach
             </video>
         </div>
         <div class="lg:hidden w-full">
